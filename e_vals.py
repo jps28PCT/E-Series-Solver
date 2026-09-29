@@ -123,7 +123,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
     for value in decade_selection:              # Convert all 'decade_selection' values to floats, and place in 'decade'
         decade.append(eng_to_float(str(value)))
 
-    symList = components.split(' ') # Seperate string of components into list
+    symList = components.split() # Seperate string of components into list
     if len(symList) == 0:
         raise ValueError("No Components were passed. Unable to continue.")
     elif len(symList) == 1:
