@@ -263,6 +263,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         zeroComponent = False
         skip = False
         pct_diff_sum = float('inf')
+        all_values_in_decade = True # Flag to check if all values in values dictionary are within preferred decade
         for val_dict in value_dict:     #For every dictionary returned by Sympy in sp.solve()
             sym_incre[0] = False        # Flags the first base symbol to start at "1.0" for each dictionary sweep
             Run = True
@@ -284,6 +285,10 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                             sym_index[base_index] = series_index
                         val = e_series_array[index][series_index]
                         val = val * decade[index]
+                        if decade[index] < 1:
+                            val = round(val, round(abs(log10(decade[index])))+2)
+                        else:
+                            val = round(val, 2)
                         base_syms_vals[base_sym] = val
                 sym_incre[0] = True    # Flags the first base symbol to increment after the first run
 
@@ -292,6 +297,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
 
                 temp_val_dict = {}
                 temp_pct_diff_dict = {}
+                temp_all_values_in_decade = True
                 for key in val_dict:
                     raw = val_dict[key].evalf(subs=base_syms_vals)
 
@@ -320,6 +326,10 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                         rounded = round(rounded * 10**exponent, abs(exponent)+2)
                     else:
                         rounded = round(rounded * 10**exponent, 2)
+
+                    temp_index = syms.index(key)
+                    if not( decade[temp_index] <= rounded and rounded < decade[temp_index] * 10):
+                        temp_all_values_in_decade = False
                     
                     temp_val_dict[key] = rounded
                     
@@ -332,7 +342,9 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 for key in temp_pct_diff_dict:
                     temp_pct_diff_sum += temp_pct_diff_dict[key]
                 
-                if temp_pct_diff_sum < pct_diff_sum:
+                if (temp_pct_diff_sum < pct_diff_sum) or (all_values_in_decade==False and temp_all_values_in_decade==True and (temp_pct_diff_sum <= pct_diff_sum)):
+                # If the temp error is less than the current error, or if all components are within desired decades and the temp error is less than the current error  
+                    all_values_in_decade = temp_all_values_in_decade
                     pct_diff_sum = temp_pct_diff_sum
                     for key in base_syms_vals:
                         values[key] = base_syms_vals[key]
