@@ -14,6 +14,16 @@ class test_e_val_select(unittest.TestCase):
 
     ### ERROR TESTS
 
+    def test_no_component_names(self):
+    # Tests case in which no component names have been passed.
+        components = " "
+        relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 0.01"]
+        e_series_selection = (24, 24)
+        decade_selection = (100, 1000)
+        with self.assertRaisesRegex(ValueError, "No Components were passed. Unable to continue."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        
+        
     def test_cannot_solve(self):
     # All cases which would result in imaginary, negative, or zero component values should be caught by this test.
     # This is because of the "positive=True" declaration in the sp.solve() calls in e_val_select()
@@ -83,6 +93,28 @@ class test_e_val_select(unittest.TestCase):
             for key in test_solution:
                 self.assertEqual(solution[key][0], test_solution[key][0])           # Check component values match exactly
 
+    def test_fully_underdetermined(self):
+    # Tests system that is underdetermined - series resistor circuit
+        components = "R1 R2 R3"
+        relationships = [
+            "1520 = R1 + R2 + R3"    # LC resonant frequency
+        ]
+        e_series_selection = (
+            24,                 # R1
+            12,                 # R2
+            6                   # R3
+        )
+        decade_selection = (
+            100,                # R1
+            100,                # R2
+            100                 # R3
+        )
+        test_solution = {"R1":(910, 0.0), "R2":(390, 0.0), "R3":(220, 0.0)}
+
+        solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        with self.subTest(solution=solution, test_solution=test_solution):
+            for key in test_solution:
+                self.assertEqual(solution[key][0], test_solution[key][0])           # Check component values match exactly
 
 if __name__ == '__main__':
     unittest.main()
