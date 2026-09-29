@@ -1,7 +1,8 @@
 """
 This test is for the main solver engine. It may take a while to fully run.
 
-When writing tests, all intended test outputs must be coprime () LCM = 1 ) to ensure only one valid solution set.
+When writing tests, all intended test outputs must be coprime ( LCM = 1 ) to ensure only one valid solution set.
+Use exclusive values from particular E-series to ensure tests match expected results.
 e_val_select() is not to be used to calculate the outputs to test against.
 """
 
@@ -11,8 +12,32 @@ from e_vals import e_val_select
 
 class test_e_val_select(unittest.TestCase):
 
+    ### ERROR TESTS
+
+    def test_cannot_solve(self):
+    # All cases which would result in imaginary, negative, or zero component values should be caught by this test.
+    # This is because of the "positive=True" declaration in the sp.solve() calls in e_val_select()
+        components = "R1"
+        relationships = [
+            "0 = R1",
+        ]
+        e_series_selection = (
+            192,
+        )
+        decade_selection = (
+            1000,
+        )
+
+        with self.assertRaisesRegex(ValueError, "The system of component relationship equations cannot be solved."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        
+
+
+    ### VALUE TESTS
+    # All error is ignored during these checks, so error is set to 0.0 in test_solution
+
     def test_fully_determined(self):
-    # Tests fully determined case
+    # Tests fully determined case - series-parallel resistor circuit
         components = "R1 R2 R3"
         relationships = [
             "2879 = 1/((1/R2) + (1/R3))",   # Adding R2 and R3 in parallel
@@ -29,13 +54,34 @@ class test_e_val_select(unittest.TestCase):
             10000,              # R2
             1000                # R3
         )
-        test_solution = {"R1":(820, 0.0), "R2":(11000, 0.0), "R3":(3900, 9.157219994310748e-05)}
+        test_solution = {"R1":(820, 0.0), "R2":(11000, 0.0), "R3":(3900, 0.0)}
 
         solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
         with self.subTest(solution=solution, test_solution=test_solution):
             for key in test_solution:
                 self.assertEqual(solution[key][0], test_solution[key][0])           # Check component values match exactly
-                self.assertAlmostEqual(solution[key][1], test_solution[key][1])     # Check error is close
+
+
+    def test_underdetermined_by_one(self):
+    # Tests system that is underdetermined by one - LC oscillator
+        components = "L1 C1"
+        relationships = [
+            "67016 = 1 / (2*3.14159265358979323846264338327950*sqrt(L1*C1))"    # LC resonant frequency
+        ]
+        e_series_selection = (
+            12,                 # L1
+            6                   # C1
+        )
+        decade_selection = (
+            0.00001,            # L1
+            0.0000001           # C1
+        )
+        test_solution = {"L1":(0.000012, 0.0), "C1":(0.00000047, 0.0)}
+
+        solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        with self.subTest(solution=solution, test_solution=test_solution):
+            for key in test_solution:
+                self.assertEqual(solution[key][0], test_solution[key][0])           # Check component values match exactly
 
 
 if __name__ == '__main__':

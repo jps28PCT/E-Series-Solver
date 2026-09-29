@@ -247,7 +247,9 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 for key in temp_val_dict:
                     values[key] = temp_val_dict[key]
                     errors[key] = temp_pct_diff_dict[key]
-                        
+
+        # These errors should not fire because of "positive=True" in sp.solve()  
+        # They have been retained just in case a system sneaks through sp.solve()              
         if not values and (negativeComponent and zeroComponent):
             raise ValueError("Negative and zero component values detected. No real solution.")
         elif not values and negativeComponent:
@@ -338,7 +340,8 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                     for key in temp_val_dict:
                         values[key] = temp_val_dict[key]
                         errors[key] = temp_pct_diff_dict[key]
-    
+        # These errors should not fire because of "positive=True" in sp.solve()  
+        # They have been retained just in case a system sneaks through sp.solve()    
         if not values and (negativeComponent and zeroComponent):
             raise ValueError("Negative and zero component values detected. Unable to solve.")
         elif not values and negativeComponent:
