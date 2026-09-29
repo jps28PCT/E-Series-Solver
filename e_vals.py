@@ -125,7 +125,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
 
     symList = components.split(' ') # Seperate string of components into list
     if len(symList) == 0:
-        raise Exception("No Components were passed. Unable to continue.")
+        raise ValueError("No Components were passed. Unable to continue.")
     elif len(symList) == 1:
         syms = (sp.symbols(components, positive=True, real=True), )   #Formatting as tuple with one element
     else:
