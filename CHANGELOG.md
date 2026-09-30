@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CHANGELOG (this file) created and back-filled with prior changes and releases
 - Included `.gitignore`
 - Included unit tests:
+  - `test_e_val_select.py` for the main solver engine 
   - `test_eng_notation.py` for engineering notation handling
   - `test_input_checks.py` for input validation functions
 
