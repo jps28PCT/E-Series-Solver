@@ -12,10 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - CHANGELOG (this file) created and back-filled with prior changes and releases
 - Included `.gitignore`
+- Included unit tests:
+  - `test_e_val_select.py` for the main solver engine 
+  - `test_eng_notation.py` for engineering notation handling
+  - `test_input_checks.py` for input validation functions
 
 ### Changed
 - Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
 - Script no longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
+- The main solver engine, `e_val_select()`, now prioritizes solution sets that have components within the desired decades that have the same or better percent error
 - `e_val_select()` raises descriptive exceptions if no component values were able to be solved for
 
 ### Fixed
@@ -23,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Script and `print_e_val_results()` now indicate when a percent error is nonzero and less than 0.001%
 - `e_val_select()` no longer raises exception at first instance of a negative or zero component value
 - Fully-determined case in `e_val_select()` now cycles through all solution sets returned by `sp.solve()` and finds the rounded solution set with the lowest cumulative error
+- Component values returned from `e_val_select()` now are rounded to mitigate floating-point rounding errors
 
 ***
 *All details below this point were retroactively added to the changelog.*
