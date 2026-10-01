@@ -1,4 +1,4 @@
-# Simultaneous E-Series Value Solver
+# E-Series Value Solver
 This application automates the process of component value selection in real-world systems.<br/>
 <br/>
 The program solves systems of component-relationship equations for real-world [E-Series](https://wikipedia.org/wiki/E_series_of_preferred_numbers) values. The systems can be fully-determined or under-determined. Every combination of E-Series values is tested based on selected parameters, and the combination with the smallest error is found.
