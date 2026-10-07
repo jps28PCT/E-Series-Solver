@@ -55,7 +55,7 @@ Each component must be associated with an E-Series. Higher E-Series have smaller
 
 
 ### Decades
-Each component must also be associated with a desired decade. Decades can be entered as decimal values, or in scientific or engineering notation. They must be valid powers of 10. Some components' values may not fall within their decade, as the final values are dictated by the relationship equations.
+Each component must also be associated with a desired decade. Decades can be entered as decimal values, or in scientific or engineering notation. They must be valid powers of 10. Some component values may not fall within their decade, as the final values are dictated by the relationship equations. However, solution sets with more component values within their assigned decades are prioritized while still finding the smallest total system error.
 
 #### Examples:
 `1`, `100`, `0.001`, `'10k'`, `'100u'`, `1e17`, `1e-11`, etc.<br/>
