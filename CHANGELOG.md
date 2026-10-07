@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
 - Script no longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
-- The main solver engine, `e_val_select()`, now prioritizes solution sets that have components within the desired decades that have the same or better percent error
+- The main solver engine, `e_val_select()`, now prioritizes component valuess within the desired decades that have the same or less percent error
 - `e_val_select()` raises descriptive exceptions if no component values were able to be solved for
 
 ### Fixed
