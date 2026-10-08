@@ -1,4 +1,5 @@
 /__pycache__
 *.pyc
 .venv/
+uv.lock
 e_series_values_*.txt
