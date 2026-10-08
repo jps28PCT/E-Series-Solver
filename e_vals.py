@@ -199,9 +199,11 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         zeroComponent = False
         skip = False
         pct_diff_sum = float('inf')
+        not_in_decade_score = float('inf') # Score for how many component values are not within preferred decades
         for val_dict in value_dict:
             temp_val_dict = {}
             temp_pct_diff_dict = {}
+            temp_not_in_decade_score = 0
             for sym in syms:
                 raw = float(val_dict[sym])
                 if raw < 0:
@@ -235,6 +237,10 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 temp_val_dict[sym] = rounded
                 temp_pct_diff_dict[sym] = err
 
+                temp_index = syms.index(sym)
+                if not( decade[temp_index] <= rounded and rounded < decade[temp_index] * 10):
+                    temp_not_in_decade_score += 1  # Increment not in decade score by one if component value not in decade
+
             if skip:
                 skip = False
                 continue
@@ -242,11 +248,16 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
             for key in temp_pct_diff_dict:
                 temp_pct_diff_sum += temp_pct_diff_dict[key]
             
-            if temp_pct_diff_sum < pct_diff_sum:
+            if (temp_pct_diff_sum < pct_diff_sum) or ((temp_not_in_decade_score < not_in_decade_score) and (temp_pct_diff_sum <= pct_diff_sum)):
+            # If the temp error is less than the current error, or if more components are within desired decades and the temp error is less than or equal to the current error    
                 pct_diff_sum = temp_pct_diff_sum
                 for key in temp_val_dict:
                     values[key] = temp_val_dict[key]
                     errors[key] = temp_pct_diff_dict[key]
+
+            if (pct_diff_sum == 0) and (not_in_decade_score == 0):
+            # If the percent error is zero and all components are in the desired decades, stop search
+                break
 
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()              
@@ -262,12 +273,16 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         negativeComponent = False
         zeroComponent = False
         skip = False
+        solution_found = False              # Flag to end search if solution set is found with cumulative error of zero and all components within desired decade
         pct_diff_sum = float('inf')
         not_in_decade_score = float('inf') # Score for how many component values are not within preferred decades
         for val_dict in value_dict:     #For every dictionary returned by Sympy in sp.solve()
+            if solution_found:
+                break
             sym_incre[0] = False        # Flags the first base symbol to start at "1.0" for each dictionary sweep
             Run = True
             while Run:
+
                 base_syms_vals = {}
                 for base_sym in base_syms:
                         base_index = base_syms.index(base_sym)
@@ -352,6 +367,12 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                     for key in temp_val_dict:
                         values[key] = temp_val_dict[key]
                         errors[key] = temp_pct_diff_dict[key]
+
+                if (pct_diff_sum == 0) and (not_in_decade_score == 0):
+                # If the percent error is zero and all components are in the desired decades, stop search
+                    solution_found = True
+                    break
+
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()    
         if not values and (negativeComponent and zeroComponent):
