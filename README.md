@@ -172,7 +172,7 @@ C1: 15 μ                Error: 0.070%
 [Enter [S] to save to textfile or [R] to re-run with new values, otherwise press [ENTER] to quit.]
 
 ```
-The application selected a 750 µH inductor, and a 150 nF capacitor. Both components have an error less than the maximum tolerance of their selected E-Series.<br/>
+The application selected a 750 µH inductor, and a 15 µF capacitor. Both components have an error less than the maximum tolerance of their selected E-Series.<br/>
 <br/>
 Plugging these values into the LC resonant frequency equation yields:
 ```math
