@@ -249,10 +249,15 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 temp_pct_diff_sum += temp_pct_diff_dict[key]
             
             if (temp_pct_diff_sum < pct_diff_sum) or ((temp_not_in_decade_score < not_in_decade_score) and (temp_pct_diff_sum <= pct_diff_sum)):
+            # If the temp error is less than the current error, or if more components are within desired decades and the temp error is less than or equal to the current error    
                 pct_diff_sum = temp_pct_diff_sum
                 for key in temp_val_dict:
                     values[key] = temp_val_dict[key]
                     errors[key] = temp_pct_diff_dict[key]
+
+            if (pct_diff_sum == 0) and (not_in_decade_score == 0):
+            # If the percent error is zero and all components are in the desired decades, stop search
+                break
 
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()              
