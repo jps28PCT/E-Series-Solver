@@ -273,12 +273,16 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         negativeComponent = False
         zeroComponent = False
         skip = False
+        solution_found = False              # Flag to end search if solution set is found with cumulative error of zero and all components within desired decade
         pct_diff_sum = float('inf')
         not_in_decade_score = float('inf') # Score for how many component values are not within preferred decades
         for val_dict in value_dict:     #For every dictionary returned by Sympy in sp.solve()
+            if solution_found:
+                break
             sym_incre[0] = False        # Flags the first base symbol to start at "1.0" for each dictionary sweep
             Run = True
             while Run:
+
                 base_syms_vals = {}
                 for base_sym in base_syms:
                         base_index = base_syms.index(base_sym)
@@ -363,6 +367,12 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                     for key in temp_val_dict:
                         values[key] = temp_val_dict[key]
                         errors[key] = temp_pct_diff_dict[key]
+
+                if (pct_diff_sum == 0) and (not_in_decade_score == 0):
+                # If the percent error is zero and all components are in the desired decades, stop search
+                    solution_found = True
+                    break
+
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()    
         if not values and (negativeComponent and zeroComponent):
