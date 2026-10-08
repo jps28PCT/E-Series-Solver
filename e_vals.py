@@ -199,9 +199,11 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         zeroComponent = False
         skip = False
         pct_diff_sum = float('inf')
+        not_in_decade_score = float('inf') # Score for how many component values are not within preferred decades
         for val_dict in value_dict:
             temp_val_dict = {}
             temp_pct_diff_dict = {}
+            temp_not_in_decade_score = 0
             for sym in syms:
                 raw = float(val_dict[sym])
                 if raw < 0:
@@ -235,6 +237,10 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 temp_val_dict[sym] = rounded
                 temp_pct_diff_dict[sym] = err
 
+                temp_index = syms.index(sym)
+                if not( decade[temp_index] <= rounded and rounded < decade[temp_index] * 10):
+                    temp_not_in_decade_score += 1  # Increment not in decade score by one if component value not in decade
+
             if skip:
                 skip = False
                 continue
@@ -242,7 +248,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
             for key in temp_pct_diff_dict:
                 temp_pct_diff_sum += temp_pct_diff_dict[key]
             
-            if temp_pct_diff_sum < pct_diff_sum:
+            if (temp_pct_diff_sum < pct_diff_sum) or ((temp_not_in_decade_score < not_in_decade_score) and (temp_pct_diff_sum <= pct_diff_sum)):
                 pct_diff_sum = temp_pct_diff_sum
                 for key in temp_val_dict:
                     values[key] = temp_val_dict[key]
