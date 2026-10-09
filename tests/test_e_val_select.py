@@ -7,7 +7,7 @@ e_val_select() is not to be used to calculate the outputs to test against.
 """
 
 import unittest
-from e_vals import e_val_select
+from e_series_solver import e_val_select
 
 
 class test_e_val_select(unittest.TestCase):

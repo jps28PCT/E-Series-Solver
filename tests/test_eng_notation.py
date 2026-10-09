@@ -3,7 +3,7 @@ This test is for the engineering notation parser and engineering notation string
 """
 
 import unittest
-from e_vals import eng_note, eng_to_float
+from e_series_solver import eng_note, eng_to_float
 
 
 class test_engineering_notation(unittest.TestCase):

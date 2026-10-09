@@ -4,7 +4,7 @@ This test is for the input validation functions.
 
 import unittest
 import re
-from e_vals import InvalidValueError, component_check, relationship_check, e_series_selection_check, decade_check
+from e_series_solver import InvalidValueError, component_check, relationship_check, e_series_selection_check, decade_check
 
 
 class test_input_validation(unittest.TestCase):
