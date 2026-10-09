@@ -3,3 +3,7 @@
 .venv/
 uv.lock
 e_series_values_*.txt
+dist/
+*.egg-info/
+build/
+*.spec
