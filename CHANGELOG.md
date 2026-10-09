@@ -18,14 +18,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `test_input_checks.py` for input validation functions
 
 ### Changed
-- Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
-- Script no longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
-- The main solver engine, `e_val_select()`, now prioritizes component valuess within the desired decades that have the same or less percent error
+- **BREAKING:** `e_vals.py` renamed to `e_series_solver.py`
+- *Script:* Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
+- *Script:* No longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
+- Now prioritizes component valuess within the desired decades that have the same or less percent error
 - `e_val_select()` raises descriptive exceptions if no component values were able to be solved for
 
 ### Fixed
-- Script now restores text cursor after "spinner" animation in all cases
-- Script and `print_e_val_results()` now indicate when a percent error is nonzero and less than 0.001%
+- *Script:* Now restores text cursor after "spinner" animation in all cases
+- Results printed to the terminal through `print_e_val_results()` now indicate when a percent error is nonzero and less than 0.001%
 - `e_val_select()` no longer raises exception at first instance of a negative or zero component value
 - Fully-determined case in `e_val_select()` now cycles through all solution sets returned by `sp.solve()` and finds the rounded solution set with the lowest cumulative error
 - Component values returned from `e_val_select()` now are rounded to mitigate floating-point rounding errors
@@ -47,13 +48,13 @@ Bug patch
 UI Improvements and Bug Fixes
 
 ### Added
-- Added terminal bell (alert sound) when script calculation completes and exceeded 5 seconds
-- Added in-line "spinner" animation during script calculation to show process has not crashed
+- *Script:* Added terminal bell (alert sound) when script calculation completes and exceeded 5 seconds
+- *Script:* Added in-line "spinner" animation during script calculation to show process has not crashed
 - README updated to reflect relevant fixes
 - Comments added to `e_val_select()` to aid in troubleshooting and maintenance
   
 ### Changed
-- Script end of run menu prints `Invalid command.` when an unrecognized option is selected
+- *Script:* End-of-run menu prints `Invalid command.` when an unrecognized option is selected
 
 ### Fixed
 - Engineering constants in `e_val_select()` were corrected after erroneous change in *v1.0.1*, and are now expressed unambiguously in exponential notation
@@ -79,8 +80,8 @@ First stable version
 - Uploaded `e_vals.py` from existing code
 - Added MIT license
 - Added README
-- Script can exit at any input line by typing `EXIT`, and exit message will print with exit location
-- Script end of run menu now allows entering `R` to rerun program with new values
+- *Script:* Now can exit at any input line by typing `EXIT`, and exit message will print with exit location
+- *Script:* End-of-run menu now allows entering `R` to rerun program with new values
 - Added engineering notation and mathematical constants to `e_val_select()` to make relationship entry easier
 - Exception raised when empty string passed as `components` in `e_val_select()`
 - Added input pre-verification functions for values to be passed to `e_val_select()`
@@ -101,8 +102,8 @@ First stable version
 - `e_series_selection` and `decade_selection` are now tuples instead of lists, in `e_val_select()`
 
 ### Fixed
-- At least one component must be entered before continuing to relationship entry when running script
-- Elapsed computing time being less than one millisecond no longer crashes script
+- *Script:* Now at least one component must be entered before continuing to relationship entry
+- *Script:* Elapsed computing time being less than one millisecond no longer causes crash
 - Component string passed to `e_val_select()` can now contain at minimum one component
 - Selecting `0` for `numSigFigs` passed to `eng_note()` now correctly formats with maximum length of digits
 - Made passing `seriesDict` optional for `print_e_val_results()`
