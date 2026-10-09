@@ -41,7 +41,7 @@ jobs:
 
     - name: Build binary with PyInstaller
       run: |
-        pyinstaller --onefile e_vals.py --name e-series-solver
+        pyinstaller --onefile e_series_solver.py --name e-series-solver
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4
