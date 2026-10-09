@@ -3,7 +3,7 @@ name = "e-series-solver"
 version = "1.1.1"
 requires-python = ">=3.14"
 dependencies = [
-    "sympy==1.14.0",
+    "sympy>=1.14.0",
 ]
 
 [dependency-groups]
