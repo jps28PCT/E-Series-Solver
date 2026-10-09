@@ -4,7 +4,7 @@ This application automates the process of component value selection in real-worl
 The program solves systems of component-relationship equations for real-world [E-Series](https://wikipedia.org/wiki/E_series_of_preferred_numbers) values. The systems can be fully-determined or under-determined. Every combination of E-Series values is tested based on selected parameters, and the combination with the smallest error is found.
 
 > [!NOTE]<br/>
-> Requires Python 3.11.9 or later and SymPy 1.13.3 or later.<br/>
+> Requires Python 3.11 or later and SymPy 1.14.0 or later.<br/>
 > If run without SymPy installed, a warning will be printed and the program will end.<br/>
 <br/>
 
@@ -172,7 +172,7 @@ C1: 15 μ                Error: 0.070%
 [Enter [S] to save to textfile or [R] to re-run with new values, otherwise press [ENTER] to quit.]
 
 ```
-The application selected a 750 µH inductor, and a 150 nF capacitor. Both components have an error less than the maximum tolerance of their selected E-Series.<br/>
+The application selected a 750 µH inductor, and a 15 µF capacitor. Both components have an error less than the maximum tolerance of their selected E-Series.<br/>
 <br/>
 Plugging these values into the LC resonant frequency equation yields:
 ```math
