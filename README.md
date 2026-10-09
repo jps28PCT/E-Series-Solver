@@ -4,7 +4,7 @@ This application automates the process of component value selection in real-worl
 The program solves systems of component-relationship equations for real-world [E-Series](https://wikipedia.org/wiki/E_series_of_preferred_numbers) values. The systems can be fully-determined or under-determined. Every combination of E-Series values is tested based on selected parameters, and the combination with the smallest error is found.
 
 > [!NOTE]<br/>
-> Requires Python 3.14 or later and SymPy 1.14.0 or later.<br/>
+> Requires Python 3.11 or later and SymPy 1.14.0 or later.<br/>
 > If run without SymPy installed, a warning will be printed and the program will end.<br/>
 <br/>
 
