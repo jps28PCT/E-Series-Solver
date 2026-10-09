@@ -8,7 +8,7 @@ The program solves systems of component-relationship equations for real-world [E
 > If run without SymPy installed, a warning will be printed and the program will end.<br/>
 <br/>
 
-The file `e_vals.py` can be run either as a [script](#running-as-a-script), or used as an [API](#using-as-an-api).<br/>
+The file `e_series_solver.py` can be run either as a [script](#running-as-a-script), or used as an [API](#using-as-an-api).<br/>
 
 The solver requires component names, component relationships, component E-Series, and desired component decades in order to solve for the best real-world component values. Any number of component names and relationshp equations can be passed, so the solver engine can analyze complex systems.
 
@@ -71,7 +71,7 @@ Running as a script allows the program to be used as a CLI application.<br/>
 
 ##### To run, open the file directly, or open the file's directory in a terminal and type the following command:
 ```bash
-$ python e_vals.py
+$ python e_series_solver.py
 ```
 
 The program will prompt sequentially for each input. At any time, type `EXIT` to exit.
@@ -188,12 +188,12 @@ This has a percent error of 0.035% from the desired frequency.<br/>
 ## Using as an API
 Custom scripts can be developed to automate workflows using the component value solver engine.<br/>
 <br/>
-To use, import as a library at the top of the file. The file can be imported as the name `ev` for simplicity.
+To use, import as a library at the top of the file. The file can be imported as the name `ess` for simplicity.
 
 ```python
-import e_vals as ev
+import e_series_solver as ess
 ```
-Now, the custom script has access to all functions. For full function descriptions, view the docstrings within [e_vals.py](e_vals.py).
+Now, the custom script has access to all functions. For full function descriptions, view the docstrings within [e_series_solver.py](e_series_solver.py).
 
 #### Functions:
 - `e_val_select()` -  Solver engine
@@ -241,7 +241,7 @@ This indicates the relationship equations are unsolvable for real-world componen
 
 #### Example of Using the Solver Engine
 ```python
-import e_vals as ev
+import e_series_solver as ess
 
 # Create voltage divider from 5V to 3.3V
 # with total current draw of 10mA
@@ -251,7 +251,7 @@ relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 10*m"]
 e_series_selection = (24, 24)
 decade_selection = (100, '1k')
 
-results = ev.e_val_select(components, relationships, e_series_selection, decade_selection)
+results = ess.e_val_select(components, relationships, e_series_selection, decade_selection)
 print(results)
 ```
 
@@ -293,7 +293,7 @@ Q = \frac{\sqrt{R_1R_2C_1C_2}}{R_1C_1 + R_2C_1 + R_1C_2(1-A_v)}
 ##### Custom script:
 
 ```python
-import e_vals as ev
+import e_series_solver as ess
 
 ### INPUT VALUES
 fc = '20k'          # Cutoff frequency
@@ -310,7 +310,7 @@ tau = "sqrt(R1*R2*C1*C2)"   # Expression to simplify equations
 K = "1 + (Rf/Rg)"           # Non-inverting gain
 
 # cutoff frequency equation
-freq = f"{ev.eng_to_float(fc)} = 1 / (2 * pi * ({tau}))"   
+freq = f"{ess.eng_to_float(fc)} = 1 / (2 * pi * ({tau}))"   
 
 # Voltage gain equation
 gain = f"{Av} = {K}"            
@@ -321,15 +321,15 @@ qual = f"{Q} = ({tau}) / (R1*C1 + R2*C1 + (1-({K}))*R1*C2)"
 relationships = [freq, gain, qual]
 
 # Solver engine
-results = ev.e_val_select(components, relationships, e_series_selection, decade_selection) 
+results = ess.e_val_select(components, relationships, e_series_selection, decade_selection) 
 
-ev.print_e_val_results(results) # Prints results to terminal
+ess.print_e_val_results(results) # Prints results to terminal
 
 headerStr = (f"fc = {fc}\n"
              f"Q = {Q}  \n"
              f"Av = {Av}")
 
-ev.save_to_textfile(results, header=headerStr) # Save to text file
+ess.save_to_textfile(results, header=headerStr) # Save to text file
 
 ```
 ##### Output:
