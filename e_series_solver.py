@@ -399,15 +399,15 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
 ##### OUTPUT FUNCTIONS #####
 
 
-def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
+def print_e_val_results(valueDict: dict, e_series_selection: tuple=None) -> None:
     """
     Prints the results of e_val_select() to terminal for display.
 
     Args:
-        valueDict:  Dictionary of component names and values, returned from e_val_select()
-        seriesDict: Dictionary of component names and component E-series values in {COMPONENT NAME : E-SERIES} pairs.
-                    Only used to select the appropriate number of significant figures for display, so not necessary. 
-                    Defaults to None.
+        valueDict:          Dictionary of component names and values, returned from e_val_select()
+        e_series_selection: Tuple of component E-series values in order of component list passed to e_val_select()
+                            Only used to select the appropriate number of significant figures for display, so not necessary. 
+                            Defaults to None.
         
         Returns:
             After printing to the terminal, None.
@@ -417,9 +417,10 @@ def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
           "\033[1;36;40m│            R E S U L T S :            │\033[0m\n"
           "\033[1;36;40m└───────────────────────────────────────┘\033[0m")
 
+    valueKeys = list(valueDict.keys())
     for component in valueDict:
-        if seriesDict and component in seriesDict:
-            if seriesDict[component] in [3, 6, 12, 24]:
+        if e_series_selection:
+            if e_series_selection[valueKeys.index(component)] in [3, 6, 12, 24]:
                 sigfigs = 2
             else:
                 sigfigs = 3
@@ -439,14 +440,14 @@ def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
 ### END print_e_val_results()
 
 
-def save_e_val_results(valueDict, seriesDict: dict=None, relationships: list=None, header: str=None, footer: str=None) -> str:
+def save_e_val_results(valueDict, e_series_selection: list=None, relationships: list=None, header: str=None, footer: str=None) -> str:
     """
     Writes results of e_val_select() to a text file. Name of text file is generated based on UNIX timestamp.
     Encoding will always be in UTF-8.
 
     Args:
         valueDict (dict):       Returned dictionary from e_val_select()
-        seriesDict (dict):      (Optional) Dictionary with component names as keys and selected E-Series as values
+        e_series_selection:     (Optional) Tuple of component E-series values in order of component list passed to e_val_select()
         relationships (list):   (Optional) List of component relationships, as strings
         header (str):           (Optional) Line of text to print at beginning of text file
         footer (str):           (Optional) Line of text to print at end of text file
@@ -468,9 +469,10 @@ def save_e_val_results(valueDict, seriesDict: dict=None, relationships: list=Non
         file.write(f"\n{header}\n\n")
     
     file.write("\nR E S U L T S :\n\n")
+    valueKeys = list(valueDict.keys())
     for component in valueDict:
-        if seriesDict and component in seriesDict:
-            if seriesDict[component] in [3, 6, 12, 24]:
+        if e_series_selection:
+            if e_series_selection[valueKeys.index(component)] in [3, 6, 12, 24]:
                 sigfigs = 2
             else:
                 sigfigs = 3
@@ -479,11 +481,11 @@ def save_e_val_results(valueDict, seriesDict: dict=None, relationships: list=Non
         file.write(f"{component}: {float_to_eng(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
                    f"Error: {valueDict[component][1]*100:.3f}%\n")
 
-    if seriesDict:
+    if e_series_selection:
         file.write("\n\n__________________________________________________\n\n")
         file.write("E - S E R I E S   S E L E C T I O N :\n\n")
-        for component in seriesDict:
-            file.write(f"{component}: \t{seriesDict[component]}\n")
+        for component in valueKeys:
+            file.write(f"{component}: \t{e_series_selection[valueKeys.index(component)]}\n")
 
     if relationships:
         file.write("\n\n__________________________________________________\n\n")
@@ -953,7 +955,6 @@ if __name__ == "__main__":
               "(Valid E-series are: 3, 6, 12, 24, 48, 96, 192)\033[0m")
         
         e_ser_tup = ()
-        e_ser_dict = {}
         for comp in comp_str.split(" "):    ### E-Series selection, per component
             if comp:
                 while True:
@@ -964,7 +965,6 @@ if __name__ == "__main__":
                         e_ser = int(e_ser)
                         e_series_selection_check(e_ser, out="exception")
                         e_ser_tup = e_ser_tup + (e_ser, )
-                        e_ser_dict[comp] = e_ser
                         break
                     except InvalidValueError as err:
                         print(f"\033[2K\033[1;31;40m{err}\033[0m\033[2F")
@@ -1069,7 +1069,7 @@ if __name__ == "__main__":
             computed_time = f"{elapsed} seconds."
         print(f"\r\033[2KComputed in {computed_time}\n\n")
         
-        print_e_val_results(values, e_ser_dict)
+        print_e_val_results(values, e_ser_tup)
 
         print("\n\n\n\n")
         allowSave = True
@@ -1084,7 +1084,7 @@ if __name__ == "__main__":
             option = input("\033[2K").upper()
             if option == 'S' and allowSave:
                 allowSave = False
-                name = save_e_val_results(values, e_ser_dict, relationship_list, footer=f"Computed in {computed_time}")
+                name = save_e_val_results(values, e_ser_tup, relationship_list, footer=f"Computed in {computed_time}")
                 print(f"\033[2F\033[2K\033[1;33;40mSaved to \033[0m{name}")
             elif option == 'R':
                 break
