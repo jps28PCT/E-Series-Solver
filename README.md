@@ -388,3 +388,24 @@ __________________________________________________
 
 Calculated on Fri Oct  9 21:09:16 2026
 ```
+The custom python script selected a cutoff frequency of 2 kHz, a Butterworth quality factor, and a gain of 2.
+Plugging in the output component values yields the following.
+
+##### Cutoff frequency:
+```math
+f_{c} = \frac{1}{2\pi\sqrt{(1.8k\Omega)(1.1k\Omega)(6.8nF)(4.7nF)}} \approx 20.0071 kHz
+```
+
+##### Voltage gain:
+```math
+A_v = 1 +\frac{10k\Omega}{10k\Omega} = 2
+```
+
+##### Quality factor:
+```math
+Q = \frac{\sqrt{(1.8k\Omega)(1.1k\Omega)(6.8nF)(4.7nF)}}{(1.8k\Omega)(6.8nF) + (1.1k\Omega)(6.8nF) + (1.8k\Omega)(4.7nF)(1-(1 +\frac{10k\Omega}{10k\Omega}))} \approx 0.706476
+```
+
+The voltage gain is exact, the cutoff frequency has an error of about 0.036%, and the quality factor has a percent error of 0.089%.
+
+Creating a custom script using `e-series-solver` allows for rapid iterations of similar circuit topologies.
