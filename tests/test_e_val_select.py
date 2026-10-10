@@ -115,6 +115,43 @@ class test_e_val_select(unittest.TestCase):
                     for item in test_solution:
                         self.assertAlmostEqual(solution["R1"][item[0]], item[1], 2)
 
+    def test_rounding_to_selected_e_series(self):
+    # Tests if values are rounded to desired E-Series.
+    # Each test value is not available in any lower E-Series lists.
+        components = "R3 R6 R12 R24 R48 R96 R192"
+        relationships = [
+            "R3 = 2.2",
+            "R6 = 1.5",
+            "R12 = 3.9",
+            "R24 = 5.1",
+            "R48 = 2.49",
+            "R96 = 2.43",
+            "R192 = 2.46",
+        ]
+        e_series_selection = (
+            3,
+            6,
+            12,
+            24,
+            48,
+            96,
+            192
+        )
+        decade_selection = (1, 1, 1, 1, 1, 1, 1)
+        test_solution = {"R3":(2.2, 0.0), 
+                         "R6":(1.5, 0.0),
+                         "R12":(3.9, 0.0),
+                         "R24":(5.1, 0.0),
+                         "R48":(2.49, 0.0),
+                         "R96":(2.43, 0.0),
+                         "R192":(2.46, 0.0)}
+
+        solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        with self.subTest(solution=solution, test_solution=test_solution):
+            for key in test_solution:
+                self.assertEqual(solution[key][0], test_solution[key][0])           # Check component values match exactly
+
+
     ### VALUE TESTS
     # All error is ignored during these checks, so error is set to 0.0 in test_solution
 
