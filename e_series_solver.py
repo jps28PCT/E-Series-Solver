@@ -39,6 +39,8 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         components (str):           Names of components, as a string delimited with spaces.
                                     Example: "R1 R2 C1 L1"
         relationships (list):       List of strings representing mathematical relationships of the components.
+                                    NOTE: The equations entered here are entered directly into SymPy.
+                                    Inputs here are not sanitized, so ensure equations do not contain malicious code before using. 
                                     Example: ["R2 / R1 = 2", "1 / (C1 * L1) = 500", "(R1 + R2) / (C1 + L1) = 2"]
         e_series_selection (tuple): List of E-series to use for each component, in the same order as "components".
                                     Must be 3, 6, 12, 24, 48, 96, or 192.
