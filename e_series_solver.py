@@ -297,15 +297,15 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                         base_index = base_syms.index(base_sym)
                         series_index = sym_index[base_index]
                         index = syms.index(base_sym)
-                        if sym_incre[base_index]:                           # If the current base symbol is flagged to increment
-                            sym_incre[base_index] = False                   #   Reset the flag
-                            series_index += 1                               #   Increment the index by 1
-                            if series_index >= len(e_series_array[index]):  #   If index is incremented outside of e-series value list
-                                series_index = 0                            #       Set index to 0
-                                if base_index + 1 < len(sym_incre):         #       If not last item in sym_incre list
-                                    sym_incre[base_index+1] = True          #           Set the flag so the next base symbol index increments
-                                else:                                       #       Else
-                                    Run = False                             #           Reset flag to continue loop
+                        if sym_incre[base_index]:                               # If the current base symbol is flagged to increment
+                            sym_incre[base_index] = False                       #   Reset the flag
+                            series_index += 1                                   #   Increment the index by 1
+                            if series_index >= len(e_series_array[index])-1:    #   If index is incremented outside of e-series value list (excluding final value, to prevent searching same value twice)
+                                series_index = 0                                #       Set index to 0
+                                if base_index + 1 < len(sym_incre):             #       If not last item in sym_incre list
+                                    sym_incre[base_index+1] = True              #           Set the flag so the next base symbol index increments
+                                else:                                           #       Else
+                                    Run = False                                 #           Reset flag to continue loop
                             sym_index[base_index] = series_index
                         val = e_series_array[index][series_index]
                         val = val * decade[index]
