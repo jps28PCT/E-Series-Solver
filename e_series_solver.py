@@ -1093,3 +1093,4 @@ if __name__ == "__main__":
                 sys.exit("User exit at completion.")
             else:
                 print(f"\033[2F\033[2K\033[1;31;40mInvalid command.")
+### END OF SCRIPT
