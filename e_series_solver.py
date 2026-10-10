@@ -259,6 +259,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
             
             if (temp_pct_diff_sum < pct_diff_sum) or ((temp_not_in_decade_score < not_in_decade_score) and (temp_pct_diff_sum <= pct_diff_sum)):
             # If the temp error is less than the current error, or if more components are within desired decades and the temp error is less than or equal to the current error    
+                not_in_decade_score = temp_not_in_decade_score
                 pct_diff_sum = temp_pct_diff_sum
                 for key in temp_val_dict:
                     values[key] = temp_val_dict[key]
