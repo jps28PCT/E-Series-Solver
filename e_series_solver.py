@@ -4,9 +4,9 @@ based on mathematical relationships between components.
 
 NOTE: SymPy is a dependency and must be installed to run.
 
-Instead of calling the functions directly, the module can be run as a script
-and the values can be entered when prompted.
-The results will be written to the screen.
+This module can be run either as a script or used as an API.
+
+For more information, visit the github repository at https://github.com/jps28PCT/E-Series-Solver
 
 """
 
@@ -390,7 +390,13 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         returnDict[symList[syms.index(sym)]] = (values[sym], errors[sym])
 
     return returnDict
+### END e_val_select()
 
+
+
+
+
+##### OUTPUT FUNCTIONS #####
 
 
 def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
@@ -430,7 +436,77 @@ def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
               f"\t\t\033[1;36;40mError:\033[0m {pct_error} %")
 
     return None
+### END print_e_val_results()
+
+
+def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None, header: str=None, footer: str=None) -> str:
+    """
+    Writes results of e_val_select() to a text file. Name of text file is generated based on UNIX timestamp.
+    Encoding will always be in UTF-8.
+
+    Args:
+        valueDict (dict):       Returned dictionary from e_val_select()
+        seriesDict (dict):      (Optional) Dictionary with component names as keys and selected E-Series as values
+        relationships (list):   (Optional) List of component relationships, as strings
+        header (str):           (Optional) Line of text to print at beginning of text file
+        footer (str):           (Optional) Line of text to print at end of text file
     
+    Returns:
+        Name of text file, as str.
+    """
+    timeInt = int(time())
+    humanTime = ctime()
+
+    fileName = f"e_series_values_{timeInt}.txt"
+    file = open(fileName, 'w', encoding="utf-8")
+
+    file.write("┌───────────────────────────────────────────────────┐\n"
+               "│ E - S E R I E S   C O M P O N E N T   V A L U E S │\n"
+               "└───────────────────────────────────────────────────┘\n\n")
+
+    if header:
+        file.write(f"\n{header}\n\n")
+    
+    file.write("\nR E S U L T S :\n\n")
+    for component in valueDict:
+        if seriesDict and component in seriesDict:
+            if seriesDict[component] in [3, 6, 12, 24]:
+                sigfigs = 2
+            else:
+                sigfigs = 3
+        else:
+            sigfigs = 3
+        file.write(f"{component}: {eng_note(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
+                   f"Error: {valueDict[component][1]*100:.3f}%\n")
+
+    if seriesDict:
+        file.write("\n\n__________________________________________________\n\n")
+        file.write("E - S E R I E S   S E L E C T I O N :\n\n")
+        for component in seriesDict:
+            file.write(f"{component}: \t{seriesDict[component]}\n")
+
+    if relationships:
+        file.write("\n\n__________________________________________________\n\n")
+        file.write("R E L A T I O N S H I P S :\n\n\n")
+        for relationship in relationships:
+            file.write(f"Relationship:  {relationship}\n\n\n")
+            left, right = relationship.split('=')
+            left_ex = sp.parse_expr(left)
+            right_ex = sp.parse_expr(right)
+            file.write(sp.pretty(sp.Eq(left_ex, right_ex), use_unicode=True))
+            if not relationships.index(relationship) == len(relationships)-1:
+                file.write("\n\n\n\n- - - - - - - - - - - - - - - - - - - - ")
+            file.write("\n\n\n")
+    file.write("\n__________________________________________________\n")
+    file.write(f"\nCalculated on {humanTime}\n")
+    if footer:
+        file.write(f"{footer}\n")
+    file.close()
+    return fileName
+### END save_to_textfile()
+
+
+##### ENGINEERING NOTATION FUNCITONS #####
         
 
 def eng_note(inputValue: float, numSigFigs: int=0, encoding: str="ASCII") -> str:
@@ -565,6 +641,7 @@ def eng_note(inputValue: float, numSigFigs: int=0, encoding: str="ASCII") -> str
             returnVal += '  '
             
     return returnVal
+### END eng_note()
     
     
     
@@ -648,74 +725,7 @@ def eng_to_float(inputStr: str) -> float:
         
     returnNum = float(f"{numStr}e{exponent}")
     return returnNum
-
-
-
-def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None, header: str=None, footer: str=None) -> str:
-    """
-    Writes results of e_val_select() to a text file. Name of text file is generated based on UNIX timestamp.
-    Encoding will always be in UTF-8.
-
-    Args:
-        valueDict (dict):       Returned dictionary from e_val_select()
-        seriesDict (dict):      (Optional) Dictionary with component names as keys and selected E-Series as values
-        relationships (list):   (Optional) List of component relationships, as strings
-        header (str):           (Optional) Line of text to print at beginning of text file
-        footer (str):           (Optional) Line of text to print at end of text file
-    
-    Returns:
-        Name of text file, as str.
-    """
-    timeInt = int(time())
-    humanTime = ctime()
-
-    fileName = f"e_series_values_{timeInt}.txt"
-    file = open(fileName, 'w', encoding="utf-8")
-
-    file.write("┌───────────────────────────────────────────────────┐\n"
-               "│ E - S E R I E S   C O M P O N E N T   V A L U E S │\n"
-               "└───────────────────────────────────────────────────┘\n\n")
-
-    if header:
-        file.write(f"\n{header}\n\n")
-    
-    file.write("\nR E S U L T S :\n\n")
-    for component in valueDict:
-        if seriesDict and component in seriesDict:
-            if seriesDict[component] in [3, 6, 12, 24]:
-                sigfigs = 2
-            else:
-                sigfigs = 3
-        else:
-            sigfigs = 3
-        file.write(f"{component}: {eng_note(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
-                   f"Error: {valueDict[component][1]*100:.3f}%\n")
-
-    if seriesDict:
-        file.write("\n\n__________________________________________________\n\n")
-        file.write("E - S E R I E S   S E L E C T I O N :\n\n")
-        for component in seriesDict:
-            file.write(f"{component}: \t{seriesDict[component]}\n")
-
-    if relationships:
-        file.write("\n\n__________________________________________________\n\n")
-        file.write("R E L A T I O N S H I P S :\n\n\n")
-        for relationship in relationships:
-            file.write(f"Relationship:  {relationship}\n\n\n")
-            left, right = relationship.split('=')
-            left_ex = sp.parse_expr(left)
-            right_ex = sp.parse_expr(right)
-            file.write(sp.pretty(sp.Eq(left_ex, right_ex), use_unicode=True))
-            if not relationships.index(relationship) == len(relationships)-1:
-                file.write("\n\n\n\n- - - - - - - - - - - - - - - - - - - - ")
-            file.write("\n\n\n")
-    file.write("\n__________________________________________________\n")
-    file.write(f"\nCalculated on {humanTime}\n")
-    if footer:
-        file.write(f"{footer}\n")
-    file.close()
-    return fileName
-
+### END eng_to_float()
 
 
 
