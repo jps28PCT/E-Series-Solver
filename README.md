@@ -388,7 +388,7 @@ __________________________________________________
 
 Calculated on Fri Oct  9 21:09:16 2026
 ```
-The custom python script selected a cutoff frequency of 2 kHz, a Butterworth quality factor, and a gain of 2.
+The custom python script selected a cutoff frequency of 20 kHz, a Butterworth quality factor, and a gain of 2.
 Plugging in the output component values yields the following.
 
 ##### Cutoff frequency:
