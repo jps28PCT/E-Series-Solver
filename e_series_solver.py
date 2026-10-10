@@ -56,6 +56,18 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
         Dictionary, with component names as keys, and tuple containing (VALUE, ERROR) as values.
         'VALUE' is the calculated E-Series value, and 'ERROR' is the percent error between the E-Series value and the ideal.
     """
+    symList = components.split() # Seperate string of components into list
+    if len(symList) == 0:
+        raise ValueError("No Components were passed. Unable to continue.")
+    elif len(symList) > len(e_series_selection):
+        raise ValueError("Too few E-Series selections were passed. There must be one E-Series selection per component.")
+    elif len(symList) < len(e_series_selection):
+        raise ValueError("Too many E-Series selections were passed. There must be one E-Series selection per component.")
+    elif len(symList) > len(decade_selection):
+        raise ValueError("Too few decade selections were passed. There must be one decade selection per component.")
+    elif len(symList) < len(decade_selection):
+        raise ValueError("Too many decade selections were passed. There must be one decade selection per component.")
+
     e_series_array = []
     for item in e_series_selection:
         match item:
@@ -123,10 +135,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
     for value in decade_selection:              # Convert all 'decade_selection' values to floats, and place in 'decade'
         decade.append(eng_to_float(str(value)))
 
-    symList = components.split() # Seperate string of components into list
-    if len(symList) == 0:
-        raise ValueError("No Components were passed. Unable to continue.")
-    elif len(symList) == 1:
+    if len(symList) == 1:
         syms = (sp.symbols(components, positive=True, real=True), )   #Formatting as tuple with one element
     else:
         syms = sp.symbols(components, positive=True, real=True)

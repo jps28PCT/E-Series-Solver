@@ -22,8 +22,43 @@ class test_e_val_select(unittest.TestCase):
         decade_selection = (100, 1000)
         with self.assertRaisesRegex(ValueError, "No Components were passed. Unable to continue."):
             e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
-        
-        
+
+    def test_too_few_e_series_selections(self):
+    # Tests case in which there are less E-series selections than components.
+        components = "R1 R2"
+        relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 0.01"]
+        e_series_selection = (24,)
+        decade_selection = (100, 1000)
+        with self.assertRaisesRegex(ValueError, "Too few E-Series selections were passed. There must be one E-Series selection per component."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+    
+    def test_too_many_e_series_selections(self):
+    # Tests case in which there are more E-series selections than components.
+        components = "R1 R2"
+        relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 0.01"]
+        e_series_selection = (24, 24, 24)
+        decade_selection = (100, 1000)
+        with self.assertRaisesRegex(ValueError, "Too many E-Series selections were passed. There must be one E-Series selection per component."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+
+    def test_too_few_decade_selections(self):
+    # Tests case in which there are less decade selections than components.
+        components = "R1 R2"
+        relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 0.01"]
+        e_series_selection = (24, 24)
+        decade_selection = (100,)
+        with self.assertRaisesRegex(ValueError, "Too few decade selections were passed. There must be one decade selection per component."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+    
+    def test_too_many_decade_selections(self):
+    # Tests case in which there are more decade selections than components.
+        components = "R1 R2"
+        relationships = [ "3.3 = 5 * R2/(R1+R2)",  "5 / (R1+R2) = 0.01"]
+        e_series_selection = (24, 24)
+        decade_selection = (100, 1000, 10000)
+        with self.assertRaisesRegex(ValueError, "Too many decade selections were passed. There must be one decade selection per component."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+                   
     def test_cannot_solve(self):
     # All cases which would result in imaginary, negative, or zero component values should be caught by this test.
     # This is because of the "positive=True" declaration in the sp.solve() calls in e_val_select()
