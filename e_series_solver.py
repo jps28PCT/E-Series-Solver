@@ -439,7 +439,7 @@ def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
 ### END print_e_val_results()
 
 
-def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None, header: str=None, footer: str=None) -> str:
+def save_e_val_results(valueDict, seriesDict: dict=None, relationships: list=None, header: str=None, footer: str=None) -> str:
     """
     Writes results of e_val_select() to a text file. Name of text file is generated based on UNIX timestamp.
     Encoding will always be in UTF-8.
@@ -503,7 +503,7 @@ def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None,
         file.write(f"{footer}\n")
     file.close()
     return fileName
-### END save_to_textfile()
+### END save_e_val_results()
 
 
 ##### ENGINEERING NOTATION FUNCITONS #####
@@ -1084,7 +1084,7 @@ if __name__ == "__main__":
             option = input("\033[2K").upper()
             if option == 'S' and allowSave:
                 allowSave = False
-                name = save_to_textfile(values, e_ser_dict, relationship_list, footer=f"Computed in {computed_time}")
+                name = save_e_val_results(values, e_ser_dict, relationship_list, footer=f"Computed in {computed_time}")
                 print(f"\033[2F\033[2K\033[1;33;40mSaved to \033[0m{name}")
             elif option == 'R':
                 break
