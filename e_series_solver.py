@@ -478,8 +478,15 @@ def save_e_val_results(valueDict, e_series_selection: list=None, relationships: 
                 sigfigs = 3
         else:
             sigfigs = 3
+        error = valueDict[component][1] * 100
+        if error == 0.0:
+            pct_error = "  0    "
+        elif error < 0.001:
+            pct_error = "< 0.001"
+        else:
+            pct_error = f" {error:>6.3f}"
         file.write(f"{component}: {float_to_eng(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
-                   f"Error: {valueDict[component][1]*100:.3f}%\n")
+                   f"Error: {pct_error}%\n")
 
     if e_series_selection:
         file.write("\n\n__________________________________________________\n\n")
