@@ -432,7 +432,7 @@ def print_e_val_results(valueDict: dict, seriesDict: dict=None) -> None:
             pct_error = "< 0.001"
         else:
             pct_error = f" {error:>6.3f}"
-        print(f"\033[1;33;40m{component}:\033[0m {eng_note(valueDict[component][0], sigfigs, encoding=sys.getdefaultencoding())}"
+        print(f"\033[1;33;40m{component}:\033[0m {float_to_eng(valueDict[component][0], sigfigs, encoding=sys.getdefaultencoding())}"
               f"\t\t\033[1;36;40mError:\033[0m {pct_error} %")
 
     return None
@@ -476,7 +476,7 @@ def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None,
                 sigfigs = 3
         else:
             sigfigs = 3
-        file.write(f"{component}: {eng_note(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
+        file.write(f"{component}: {float_to_eng(valueDict[component][0], sigfigs, encoding='UTF-8')}\t\t"
                    f"Error: {valueDict[component][1]*100:.3f}%\n")
 
     if seriesDict:
@@ -509,7 +509,7 @@ def save_to_textfile(valueDict, seriesDict: dict=None, relationships: list=None,
 ##### ENGINEERING NOTATION FUNCITONS #####
         
 
-def eng_note(inputValue: float, numSigFigs: int=0, encoding: str="ASCII") -> str:
+def float_to_eng(inputValue: float, numSigFigs: int=0, encoding: str="ASCII") -> str:
     """
     Formats a numeric value as a string in engineering notation.
     Works from -10^24 to 10^24, otherwise defaults to scientific notation.
@@ -641,7 +641,7 @@ def eng_note(inputValue: float, numSigFigs: int=0, encoding: str="ASCII") -> str
             returnVal += '  '
             
     return returnVal
-### END eng_note()
+### END float_to_eng()
     
     
     

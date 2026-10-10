@@ -3,7 +3,7 @@ This test is for the engineering notation parser and engineering notation string
 """
 
 import unittest
-from e_series_solver import eng_note, eng_to_float
+from e_series_solver import float_to_eng, eng_to_float
 
 
 class test_engineering_notation(unittest.TestCase):
@@ -14,27 +14,27 @@ class test_engineering_notation(unittest.TestCase):
     
     def test_float_to_eng_zero(self):
     # Value of zero
-        returnedStr = eng_note(inputValue=0.0, numSigFigs=1)
+        returnedStr = float_to_eng(inputValue=0.0, numSigFigs=1)
         self.assertEqual(returnedStr, "0  ")
 
     def test_float_to_eng_ascii_inf(self):
     # Value of positive infinity, ASCII output
-        returnedStr = eng_note(inputValue=float('inf'), numSigFigs=1, encoding="ASCII")
+        returnedStr = float_to_eng(inputValue=float('inf'), numSigFigs=1, encoding="ASCII")
         self.assertEqual(returnedStr, "inf  ")
 
     def test_float_to_eng_utf8_inf(self):
     # Value of positive infinity, UTF-8 output
-        returnedStr = eng_note(inputValue=float('inf'), numSigFigs=1, encoding="UTF-8")
+        returnedStr = float_to_eng(inputValue=float('inf'), numSigFigs=1, encoding="UTF-8")
         self.assertEqual(returnedStr, "\u221E  ")
 
     def test_float_to_eng_ascii_neg_inf(self):
     # Value of negative infinity, ASCII output
-        returnedStr = eng_note(inputValue=float('-inf'), numSigFigs=1, encoding="ASCII")
+        returnedStr = float_to_eng(inputValue=float('-inf'), numSigFigs=1, encoding="ASCII")
         self.assertEqual(returnedStr, "-inf  ")
 
     def test_float_to_eng_utf8_neg_inf(self):
     # Value of negative infinity, UTF-8 output
-        returnedStr = eng_note(inputValue=float('-inf'), numSigFigs=1, encoding="UTF-8")
+        returnedStr = float_to_eng(inputValue=float('-inf'), numSigFigs=1, encoding="UTF-8")
         self.assertEqual(returnedStr, "-\u221E  ")
 
     def test_float_to_eng_sig_figs(self):
@@ -58,7 +58,7 @@ class test_engineering_notation(unittest.TestCase):
                     (16, "3.141592653589793  ")]
         for sig_fig, expected in sig_fig_cases:
             with self.subTest(sig_fig=sig_fig):
-                returnedStr = eng_note(inputValue=self.TEST_FLOAT, numSigFigs=sig_fig)
+                returnedStr = float_to_eng(inputValue=self.TEST_FLOAT, numSigFigs=sig_fig)
                 self.assertEqual(returnedStr, expected)
 
     def test_float_to_eng_ascii_prefixes(self):
@@ -120,7 +120,7 @@ class test_engineering_notation(unittest.TestCase):
         
         for test_value, expected in prefixes_cases:
             with self.subTest(test_value=test_value):
-                returnedStr = eng_note(inputValue=test_value, numSigFigs=5, encoding="ASCII")
+                returnedStr = float_to_eng(inputValue=test_value, numSigFigs=5, encoding="ASCII")
                 self.assertEqual(returnedStr, expected)
 
     def test_float_to_eng_utf8_prefixes(self):
@@ -132,7 +132,7 @@ class test_engineering_notation(unittest.TestCase):
         
         for test_value, expected in prefixes_cases:
             with self.subTest(test_value=test_value):
-                returnedStr = eng_note(inputValue=test_value, numSigFigs=5, encoding="UTF-8")
+                returnedStr = float_to_eng(inputValue=test_value, numSigFigs=5, encoding="UTF-8")
                 self.assertEqual(returnedStr, expected)
 
 
