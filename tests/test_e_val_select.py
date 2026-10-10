@@ -75,8 +75,45 @@ class test_e_val_select(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "The system of component relationship equations cannot be solved."):
             e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
-        
 
+
+    ### ROUNDING TESTS
+
+    def test_round_up(self):
+    # Tests if component value can be rounded up.
+    # Value given in equation is exactly 3% below target value.
+        components = "R1"
+        relationships = [ "R1 = 970"]
+        e_series_selection = (24,)
+        decade_selection = (1000,)
+
+        test_solution = (
+            (0, 1000),      # Check component value (index 0) equals 1k
+            (1, 0.03)       # Check error value (index 1) equals 0.03
+        )
+
+        solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        with self.subTest(solution=solution, test_solution=test_solution):
+                    for item in test_solution:
+                        self.assertAlmostEqual(solution["R1"][item[0]], item[1], 2)
+
+    def test_round_down(self):
+    # Tests if component value can be rounded down.
+    # Value given in equation is exactly 3% above target value.
+        components = "R1"
+        relationships = [ "R1 = 1030"]
+        e_series_selection = (24,)
+        decade_selection = (1000,)
+
+        test_solution = (
+            (0, 1000),      # Check component value (index 0) equals 1k
+            (1, 0.03)       # Check error value (index 1) equals 0.03
+        )
+
+        solution = e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+        with self.subTest(solution=solution, test_solution=test_solution):
+                    for item in test_solution:
+                        self.assertAlmostEqual(solution["R1"][item[0]], item[1], 2)
 
     ### VALUE TESTS
     # All error is ignored during these checks, so error is set to 0.0 in test_solution
