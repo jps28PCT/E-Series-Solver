@@ -204,9 +204,9 @@ Now, the custom script has access to all functions. For full function descriptio
 #### Functions:
 - `e_val_select()` -  Solver engine
 - `print_e_val_results()` - ANSI terminal printer for values returned from solver engine
-- `eng_note()` - Converts floats to strings in SI engineering notation
-- `eng_to_float()` - Converts strings in SI engineering notation to floats
 - `save_to_textfile()` - Writes values returned from solver engine to a text file
+- `float_to_eng()` - Converts floats to strings in SI engineering notation
+- `eng_to_float()` - Converts strings in SI engineering notation to floats
 - `component_check()` - Quick input validation for component names
 - `relationship_check()` - Quick input validation for component relationship equations
 - `e_series_selection_check()` - Quick input validation for E-Series selection
