@@ -365,12 +365,12 @@ Av = 2
 
 R E S U L T S :
 
-R1: 1.8 k		Error: 0.000%
-R2: 1.1 k		Error: 0.000%
-Rf: 10 k		Error: 0.000%
-Rg: 10 k		Error: 0.000%
-C1: 6.8 n		Error: 0.000%
-C2: 4.7 n		Error: 0.071%
+R1: 1.8 k		Error:   0    %
+R2: 1.1 k		Error:   0    %
+Rf: 10 k		Error: < 0.001%
+Rg: 10 k		Error:   0    %
+C1: 6.8 n		Error: < 0.001%
+C2: 4.7 n		Error:   0.071%
 
 
 __________________________________________________
@@ -386,5 +386,5 @@ C2: 	12
 
 __________________________________________________
 
-Calculated on Fri Oct  9 21:02:25 2026
+Calculated on Fri Oct  9 21:09:16 2026
 ```
