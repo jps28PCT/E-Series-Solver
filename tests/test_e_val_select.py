@@ -13,7 +13,9 @@ from e_series_solver import e_val_select
 class test_e_val_select(unittest.TestCase):
 
     ### ERROR TESTS
-
+    # I have been unable to trigger all exceptions in e_val_select(). However, I am keeping them just in case something eventually triggers it.
+    # If a prevously unraised exception gets raised, that will be analyzed and potentially used for its unittest.
+    
     def test_no_component_names(self):
     # Tests case in which no component names have been passed.
         components = " "
@@ -76,6 +78,41 @@ class test_e_val_select(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "The system of component relationship equations cannot be solved."):
             e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
 
+
+    def test_fully_determined_infinity(self):
+    # Tests if infinite component value is caught and handled in fully determined case.
+        components = "R1"
+        relationships = [
+            "R1 = 99*10**9999",
+        ]
+        e_series_selection = (
+            192,
+        )
+        decade_selection = (
+            1000,
+        )
+
+        with self.assertRaisesRegex(ValueError, "Infinite component value detected. No real solution."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+
+    def test_underdetermined_infinity(self):
+    # Tests if infinite component value is caught and handled in underdetermined case.
+        components = "R1 R2"
+        relationships = [
+            "R1 * R2 = 99*10**9999",
+        ]
+        e_series_selection = (
+            192,
+            192
+        )
+        decade_selection = (
+            1000,
+            1000
+        )
+
+        with self.assertRaisesRegex(ValueError, "Component value that approached infinity detected. Unable to solve."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+    
 
     ### ROUNDING TESTS
 

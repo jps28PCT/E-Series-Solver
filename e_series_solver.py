@@ -13,7 +13,7 @@ For more information, visit the github repository at https://github.com/jps28PCT
 
 import sys
 from time import time, ctime, sleep
-from math import log10
+from math import log10, isinf
 
 try:
     import sympy as sp
@@ -208,6 +208,7 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
     if not base_syms:
         negativeComponent = False
         zeroComponent = False
+        infComponent = False
         skip = False
         pct_diff_sum = float('inf')
         not_in_decade_score = float('inf') # Score for how many component values are not within preferred decades
@@ -224,6 +225,9 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                 elif raw == 0:
                     zeroComponent = True
                     skip = True
+                    break
+                elif isinf(raw):
+                    infComponent = True
                     break
 
                 exponent = 0
@@ -273,17 +277,20 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
 
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()              
-        if not values and (negativeComponent and zeroComponent):
+        if (not values or len(values)<len(symList)) and (negativeComponent and zeroComponent):
             raise ValueError("Negative and zero component values detected. No real solution.")
-        elif not values and negativeComponent:
+        elif (not values or len(values)<len(symList)) and negativeComponent:
             raise ValueError("Negative component value detected. No real solution.")
-        elif not values and zeroComponent:
+        elif (not values or len(values)<len(symList)) and zeroComponent:
             raise ValueError("Component value of zero detected. No real solution.")
+        elif (not values or len(values)<len(symList)) and infComponent:
+            raise ValueError("Infinite component value detected. No real solution.")
 
     ### UNDER-DETERMINED - 
     else:
         negativeComponent = False
         zeroComponent = False
+        infComponent = False
         skip = False
         solution_found = False              # Flag to end search if solution set is found with cumulative error of zero and all components within desired decade
         pct_diff_sum = float('inf')
@@ -336,6 +343,9 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                         skip = True
                         zeroComponent = True
                         break
+                    elif isinf(raw):
+                        infComponent = True
+                        break
                     
                     exponent = 0
                     while abs(raw) < 1:
@@ -387,16 +397,20 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
 
         # These errors should not fire because of "positive=True" in sp.solve()  
         # They have been retained just in case a system sneaks through sp.solve()    
-        if not values and (negativeComponent and zeroComponent):
+        if (not values or len(values)<len(symList)) and (negativeComponent and zeroComponent):
             raise ValueError("Negative and zero component values detected. Unable to solve.")
-        elif not values and negativeComponent:
+        elif (not values or len(values)<len(symList)) and negativeComponent:
             raise ValueError("Negative component values detected. Unable to solve.")
-        elif not values and zeroComponent:
+        elif (not values or len(values)<len(symList)) and zeroComponent:
             raise ValueError("Component values of zero detected. Unable to solve.")
+        elif (not values or len(values)<len(symList)) and infComponent:
+            raise ValueError("Component value that approached infinity detected. Unable to solve.")
     
     if not values:
         raise ValueError("No valid component values detected. Unable to solve.")
-    
+    elif len(values) < len(symList):
+        raise ValueError("Not all components were able to be solved for.")
+
     returnDict = {}
     for sym in syms:
         returnDict[symList[syms.index(sym)]] = (values[sym], errors[sym])
