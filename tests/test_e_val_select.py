@@ -15,7 +15,7 @@ class test_e_val_select(unittest.TestCase):
     ### ERROR TESTS
     # I have been unable to trigger all exceptions in e_val_select(). However, I am keeping them just in case something eventually triggers it.
     # If a prevously unraised exception gets raised, that will be analyzed and potentially used for its unittest.
-    
+
     def test_no_component_names(self):
     # Tests case in which no component names have been passed.
         components = " "
@@ -60,7 +60,24 @@ class test_e_val_select(unittest.TestCase):
         decade_selection = (100, 1000, 10000)
         with self.assertRaisesRegex(ValueError, "Too many decade selections were passed. There must be one decade selection per component."):
             e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
-                   
+
+    def test_invalid_e_series_selection(self):
+    # Tests case where an invalid E-Series number is passed as part of the E-Series selection
+        components = "R1"
+        relationships = [
+            "1000 = R1",
+        ]
+        e_series_selection = (
+            10,
+        )
+        decade_selection = (
+            1000,
+        )
+
+        with self.assertRaisesRegex(ValueError, "'10' is not a valid E-Series number."):
+            e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
+    
+
     def test_cannot_solve(self):
     # All cases which would result in imaginary, negative, or zero component values should be caught by this test.
     # This is because of the "positive=True" declaration in the sp.solve() calls in e_val_select()
@@ -77,7 +94,6 @@ class test_e_val_select(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "The system of component relationship equations cannot be solved."):
             e_val_select(components=components, relationships=relationships, e_series_selection=e_series_selection, decade_selection=decade_selection)
-
 
     def test_fully_determined_infinity(self):
     # Tests if infinite component value is caught and handled in fully determined case.

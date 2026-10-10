@@ -130,7 +130,8 @@ def e_val_select(components: str, relationships: list, e_series_selection: tuple
                           7.50, 7.59, 7.68, 7.77, 7.87, 7.96, 8.06, 8.16, 
                           8.25, 8.35, 8.45, 8.56, 8.66, 8.76, 8.87, 8.98, 
                           9.09, 9.20, 9.31, 9.42, 9.53, 9.65, 9.76, 9.88, 10.0]
-                
+            case _:
+                raise ValueError(f"'{item}' is not a valid E-Series number.")    
         e_series_array.append(e_vals)   # Make list of E-Series value lists, in order of 'e_series_selection'
     
     decade = []
