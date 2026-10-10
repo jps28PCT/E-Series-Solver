@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - **BREAKING:** `e_vals.py` renamed to `e_series_solver.py`
+- **BREAKING:** Functions renamed to maintain consistency.
+  - `eng_note()` renamed to `float_to_eng()`
+  - `save_to_textfile()` renamed to `save_e_val_results()`
+- **BREAKING:**  `print_e_val_results()` and `save_e_val_results()` now use a tuple instead of a list for E-series-based rounding
 - *Script:* Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
 - *Script:* No longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
 - Now prioritizes component valuess within the desired decades that have the same or less percent error
