@@ -27,12 +27,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BREAKING:**  `print_e_val_results()` and `save_e_val_results()` now use a tuple instead of a list for E-series-based rounding
 - *Script:* Save output option only prompted once per script run, and multiple copies of the same run cannot be saved
 - *Script:* No longer forces exit if a `ValueError` is caught from the solver engine, and the script can be exited or restarted
-- Now prioritizes component valuess within the desired decades that have the same or less percent error
+- Now prioritizes component values within the desired decades that have the same or less percent error
 - `e_val_select()` raises descriptive exceptions if no component values were able to be solved for
 
 ### Fixed
 - *Script:* Now restores text cursor after "spinner" animation in all cases
-- Results printed to the terminal through `print_e_val_results()` now indicate when a percent error is nonzero and less than 0.001%
+- Results printed or saved with `print_e_val_results()` or `save_e_val_results()` now indicate when a percent error is nonzero and less than 0.001%
+- Rounding is improved at the upper boundary of E-series lists
 - `e_val_select()` no longer raises exception at first instance of a negative or zero component value
 - Fully-determined case in `e_val_select()` now cycles through all solution sets returned by `sp.solve()` and finds the rounded solution set with the lowest cumulative error
 - Component values returned from `e_val_select()` now are rounded to mitigate floating-point rounding errors
