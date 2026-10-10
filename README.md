@@ -68,8 +68,9 @@ Each component must also be associated with a desired decade. Decades can be ent
 ## Running as a Script
 Running as a script allows the program to be used as a CLI application.<br/>
 
+The application can be installed from the most recent [release](https://github.com/jps28PCT/E-Series-Solver/releases/tag/v1.1.1). Ensure the correct binary is installed for your operating system.
 
-##### To run, open the file directly, or open the file's directory in a terminal and type the following command:
+Alternatively, the Python file can be downloaded and run directly. To do so, open the file's directory in a terminal and type the following command:
 ```bash
 $ python e_series_solver.py
 ```
@@ -188,6 +189,11 @@ This has a percent error of 0.035% from the desired frequency.<br/>
 ## Using as an API
 Custom scripts can be developed to automate workflows using the component value solver engine.<br/>
 <br/>
+The package can be installed using `pip`.
+```bash
+pip install e-series-solver
+```
+
 To use, import as a library at the top of the file. The file can be imported as the name `ess` for simplicity.
 
 ```python
