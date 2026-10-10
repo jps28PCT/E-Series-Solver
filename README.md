@@ -329,13 +329,13 @@ relationships = [freq, gain, qual]
 # Solver engine
 results = ess.e_val_select(components, relationships, e_series_selection, decade_selection) 
 
-ess.print_e_val_results(results) # Prints results to terminal
+ess.print_e_val_results(results, e_series_selection) # Prints results to terminal
 
 headerStr = (f"fc = {fc}\n"
              f"Q = {Q}  \n"
              f"Av = {Av}")
 
-ess.save_e_val_results(results, header=headerStr) # Save to text file
+ess.save_e_val_results(results, e_series_selection, header=headerStr) # Save to text file
 
 ```
 ##### Output:
