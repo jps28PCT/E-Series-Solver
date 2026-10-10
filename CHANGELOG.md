@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - CHANGELOG (this file) created and back-filled with prior changes and releases
+- Executable binaries are now produced upon version release
+- Package uploaded to [PyPI](https://pypi.org/project/e-series-solver/) upon version release under the name `e-series-solver` 
 - Included `.gitignore`
 - Included unit tests:
   - `test_e_val_select.py` for the main solver engine 
