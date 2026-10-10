@@ -343,12 +343,12 @@ ess.save_e_val_results(results, e_series_selection, header=headerStr) # Save to 
 ┌───────────────────────────────────────┐
 │            R E S U L T S :            │
 └───────────────────────────────────────┘
-R1: 1.80 k              Error: 0.000%
-R2: 1.10 k              Error: 0.000%
-Rf: 10.0 k              Error: 0.000%
-Rg: 10.0 k              Error: 0.000%
-C1: 6.80 n              Error: 0.000%
-C2: 4.70 n              Error: 0.071%
+R1: 1.8 k               Error:   0     %
+R2: 1.1 k               Error:   0     %
+Rf: 10 k                Error: < 0.001 %
+Rg: 10 k                Error:   0     %
+C1: 6.8 n               Error: < 0.001 %
+C2: 4.7 n               Error:   0.071 %
 ```
 
 ##### Saved text file:
@@ -365,14 +365,26 @@ Av = 2
 
 R E S U L T S :
 
-R1: 1.80 k		Error: 0.000%
-R2: 1.10 k		Error: 0.000%
-Rf: 10.0 k		Error: 0.000%
-Rg: 10.0 k		Error: 0.000%
-C1: 6.80 n		Error: 0.000%
-C2: 4.70 n		Error: 0.071%
+R1: 1.8 k		Error: 0.000%
+R2: 1.1 k		Error: 0.000%
+Rf: 10 k		Error: 0.000%
+Rg: 10 k		Error: 0.000%
+C1: 6.8 n		Error: 0.000%
+C2: 4.7 n		Error: 0.071%
+
 
 __________________________________________________
 
-Calculated on Sun Jul 19 21:53:01 2026
+E - S E R I E S   S E L E C T I O N :
+
+R1: 	24
+R2: 	24
+Rf: 	24
+Rg: 	24
+C1: 	12
+C2: 	12
+
+__________________________________________________
+
+Calculated on Fri Oct  9 21:02:25 2026
 ```
